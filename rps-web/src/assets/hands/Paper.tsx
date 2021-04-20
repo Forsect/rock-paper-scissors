@@ -3,8 +3,9 @@ import * as React from "react";
 const Paper = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width={303}
-      height={492}
+      width="100%"
+      height="100%"
+      transform="rotate(-25)"
       viewBox="0 0 303 492"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

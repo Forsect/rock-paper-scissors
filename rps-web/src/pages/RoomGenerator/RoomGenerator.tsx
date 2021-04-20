@@ -3,9 +3,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const RoomGenerator = () => (
-  <Flex p={3}>
+  <Flex justifyContent="flex-end">
     <Link to="/game">
-      <Button>GAMEROOM</Button>
+      <Button>GAMEPAGE</Button>
     </Link>
   </Flex>
 );

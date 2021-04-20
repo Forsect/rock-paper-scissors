@@ -3,8 +3,9 @@ import * as React from "react";
 const Scissors = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width={242}
-      height={480}
+      width="100%"
+      height="100%"
+      transform="rotate(-25)"
       viewBox="0 0 242 480"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
