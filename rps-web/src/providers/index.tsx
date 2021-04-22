@@ -1,11 +1,14 @@
-import { ChakraProvider, theme } from "@chakra-ui/react";
-import RouterProvider from "./router/RouterProvider";
+import { ChakraProvider } from "@chakra-ui/react";
+import GameProvider from "./GameProvider";
+import RouterProvider from "./RouterProvider";
 import AppTheme from "./theme/AppTheme";
 
 const Providers = () => {
   return (
     <ChakraProvider theme={AppTheme}>
-      <RouterProvider />
+      <GameProvider>
+        <RouterProvider />
+      </GameProvider>
     </ChakraProvider>
   );
 };

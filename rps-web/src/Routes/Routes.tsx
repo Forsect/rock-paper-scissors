@@ -2,13 +2,15 @@ import { Suspense, lazy } from "react";
 import { Route, Switch } from "react-router-dom";
 import LoadingScreen from "visuals/LoadingScreen/LoadingScreen";
 import { ColorModeSwitcher } from "ColorModeSwitcher";
-import { Box, Center, Flex } from "@chakra-ui/react";
+import { Center, Flex } from "@chakra-ui/react";
+import { io } from "socket.io-client";
 
 const NotFound = () => <Center>404 Not Found</Center>;
 
 const Routes = () => {
   const HomePage = lazy(() => import("pages/RoomGenerator"));
   const GameRoom = lazy(() => import("pages/GameRoom"));
+
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Flex direction="column" minH="100vh" p={4}>

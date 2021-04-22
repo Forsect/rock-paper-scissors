@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const Rock = (props: React.SVGProps<SVGSVGElement>) => {
+const RockHand = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="100%"
@@ -16,4 +16,4 @@ const Rock = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-export default Rock;
+export default RockHand;

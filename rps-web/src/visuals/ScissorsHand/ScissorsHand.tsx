@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const Scissors = (props: React.SVGProps<SVGSVGElement>) => {
+const ScissorsHand = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="100%"
@@ -23,4 +23,4 @@ const Scissors = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-export default Scissors;
+export default ScissorsHand;

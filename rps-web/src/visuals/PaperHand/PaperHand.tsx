@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const Paper = (props: React.SVGProps<SVGSVGElement>) => {
+const PaperHand = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="100%"
@@ -34,4 +34,4 @@ const Paper = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-export default Paper;
+export default PaperHand;
