@@ -45,7 +45,7 @@ const GameRoom = () => {
           flex={1}
           mt={24}
           direction="column"
-          alignItems="center"
+          align="center"
           justifyContent="center"
         >
           <Tooltip
@@ -86,15 +86,16 @@ const GameRoom = () => {
             flex={4}
             flexDirection="column"
             justifyContent="space-around"
-            alignItems="center"
+            align="center"
             pb={12}
+            mt={4}
           >
             <HandFight opponent />
             <Box h={4} />
             <HandFight />
           </Flex>
 
-          <Flex flex={1} alignItems="center">
+          <Flex flex={1} align="center">
             <Flex flex={1.5} />
 
             <Flex flex={3} justifyContent="space-around">
@@ -120,9 +121,11 @@ const GameRoom = () => {
         </>
       )}
       {roomState === GameRoomStates.Full && (
-        <>
-          <Text>FULL</Text>
-        </>
+        <Flex flex={1} justifyContent="center" align="center">
+          <Text fontWeight="black" fontSize={48}>
+            Room is full!
+          </Text>
+        </Flex>
       )}
     </Flex>
   );

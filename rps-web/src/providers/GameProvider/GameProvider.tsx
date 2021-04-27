@@ -9,22 +9,24 @@ export const GameContext = createContext<Types.IGameContext | null>(null);
 
 const socket = io("http://localhost:4000");
 
-const GameProvider: React.FC<Types.Props> = ({ children }) => {
+const GameProvider = ({ children }: Types.Props) => {
   const { id } = useParams<{ id: string }>();
-  const [roomState, setRoomState] = useState(GameRoomStates.Waiting);
+  const [roomState, setRoomState] = useState(GameRoomStates.Loading);
 
   useEffect(() => {
     if (!socket.connected) socket.connect();
 
-    socket.emit("user's connecting", id);
+    socket.emit("user:connecting", id);
 
-    socket.on("room's ready", () => setRoomState(GameRoomStates.Playing));
+    socket.on("room:create", () => setRoomState(GameRoomStates.Waiting));
 
-    socket.on("room's full", () => setRoomState(GameRoomStates.Full));
+    socket.on("room:ready", () => setRoomState(GameRoomStates.Playing));
 
-    socket.on("user left", () => setRoomState(GameRoomStates.Left));
+    socket.on("room:full", () => setRoomState(GameRoomStates.Full));
 
-    socket.on("room's blocked", () => setRoomState(GameRoomStates.Full));
+    socket.on("room:left", () => setRoomState(GameRoomStates.Left));
+
+    socket.on("room:blocked", () => setRoomState(GameRoomStates.Full));
 
     return () => {
       socket.disconnect();

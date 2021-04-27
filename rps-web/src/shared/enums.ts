@@ -5,6 +5,7 @@ export enum Hands {
 }
 
 export enum GameRoomStates {
+  Loading,
   Waiting,
   Playing,
   Full,

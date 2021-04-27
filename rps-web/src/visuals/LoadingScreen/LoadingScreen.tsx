@@ -6,7 +6,7 @@ const LoadingScreen = () => {
   const spinnerColor = useColorModeValue("gray.500", "gray.300");
 
   return (
-    <Flex alignItems="center" justifyContent="center" h="100vh">
+    <Flex align="center" justifyContent="center" h="100vh">
       <Spinner size="xl" color={spinnerColor} />
     </Flex>
   );

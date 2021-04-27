@@ -1,14 +1,13 @@
 import { Circle, Text, Flex, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
 import { useHistory } from "react-router-dom";
 import colors from "shared/colors";
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const mainColor = useColorModeValue(colors.main, colors.mainDark);
   const history = useHistory();
 
   return (
-    <Flex flex={1} justifyContent="center" alignItems="center">
+    <Flex flex={1} justifyContent="center" align="center">
       <Circle
         size={300}
         borderWidth={5}

@@ -15,10 +15,10 @@ server.listen(4000, () => {
 io.on("connection", (socket) => {
   console.log(`user ${socket.id} connected`);
 
-  socket.on("user's connecting", (roomId: string) => {
+  socket.on("user:connecting", (roomId: string) => {
     if (blockedRooms.includes(roomId)) {
       console.log(`room ${roomId} is blocked!`);
-      socket.emit("room's blocked");
+      socket.emit("room:blocked");
       return;
     }
 
@@ -26,13 +26,14 @@ io.on("connection", (socket) => {
 
     if (!room) {
       socket.join(roomId);
+      socket.emit("room:create");
       console.log(`user ${socket.id} created the room: ${roomId}`);
     } else if (room.size >= 2) {
-      socket.emit("room's full");
+      socket.emit("room:full");
       console.log(`room ${roomId} is full!`);
     } else {
       socket.join(roomId);
-      io.to(roomId).emit("room's ready");
+      io.to(roomId).emit("room:ready");
       console.log(`user ${socket.id} joined the room: ${roomId}`);
     }
   });
@@ -41,7 +42,7 @@ io.on("connection", (socket) => {
 io.of("/").adapter.on("leave-room", (roomId, id) => {
   if (roomId !== id) console.log(`user ${id} has left the room ${roomId}`);
   blockedRooms = [...blockedRooms, roomId];
-  io.to(roomId).emit("user left");
+  io.to(roomId).emit("room:left");
 });
 
 io.of("/").adapter.on("delete-room", (roomId) => {
