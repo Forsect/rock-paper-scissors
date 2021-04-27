@@ -40,9 +40,7 @@ io.on("connection", (socket) => {
 
 io.of("/").adapter.on("leave-room", (roomId, id) => {
   if (roomId !== id) console.log(`user ${id} has left the room ${roomId}`);
-
   blockedRooms = [...blockedRooms, roomId];
-
   io.to(roomId).emit("user left");
 });
 

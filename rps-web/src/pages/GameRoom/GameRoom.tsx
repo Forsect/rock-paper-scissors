@@ -7,8 +7,6 @@ import {
   useColorModeValue,
   useClipboard,
   useToast,
-  Button,
-  ToastId,
 } from "@chakra-ui/react";
 import PaperHand from "visuals/PaperHand/PaperHand";
 import RockHand from "visuals/RockHand/RockHand";
@@ -19,8 +17,8 @@ import HandFight from "visuals/HandFight";
 import { GameRoomStates, Hands } from "shared/enums";
 import colors from "shared/colors";
 import useGameContext from "./../../hooks/useGameContext";
-import { useHistory, useParams } from "react-router-dom";
-import { CloseIcon, WarningIcon } from "@chakra-ui/icons";
+import { useParams } from "react-router-dom";
+import useToastOnUserLeave from "hooks/useToastOnUserLeave";
 
 const GameRoom = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,50 +27,10 @@ const GameRoom = () => {
   const { hasCopied, onCopy } = useClipboard(sendLink);
   const { roomState } = useGameContext();
   const toast = useToast();
-  const history = useHistory();
   const [mainPlayerHand, setMainPlayerHand] = useState<Hands | null>(null);
   const [enemyPlayerHand, setEnemyPlayerHand] = useState<Hands | null>(null);
 
-  useEffect(() => {
-    if (roomState === GameRoomStates.Left) {
-      toast({
-        position: "top",
-        duration: null,
-        render: () => (
-          <Flex
-            onClick={() => {
-              toast.closeAll();
-              history.push(`/`);
-            }}
-            flex={1}
-            py={2}
-            pl={4}
-            pr={2}
-            cursor="pointer"
-            justifyContent="space-between"
-            borderRadius="lg"
-            bgColor={"orange.200"}
-            color="#000"
-          >
-            <WarningIcon boxSize={5} alignSelf="center" />
-
-            <Flex flexDirection="column">
-              <Text fontWeight="bold"> Opponent has left the room!</Text>
-              <Text fontSize={12}>Click to play again!</Text>
-            </Flex>
-
-            <CloseIcon
-              boxSize={2}
-              onClick={(e) => {
-                toast.closeAll();
-                e.stopPropagation();
-              }}
-            />
-          </Flex>
-        ),
-      });
-    }
-  }, [roomState]);
+  useToastOnUserLeave({ roomState });
 
   useEffect(() => {
     return () => {
