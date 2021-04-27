@@ -1,9 +1,9 @@
-import { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Switch } from "react-router-dom";
 import LoadingScreen from "visuals/LoadingScreen/LoadingScreen";
 import { ColorModeSwitcher } from "ColorModeSwitcher";
 import { Center, Flex } from "@chakra-ui/react";
-import { io } from "socket.io-client";
+import GameProvider from "providers/GameProvider";
 
 const NotFound = () => <Center>404 Not Found</Center>;
 
@@ -20,7 +20,9 @@ const Routes = () => {
 
         <Switch>
           <Route path="/" exact component={HomePage} />
-          <Route path="/game" component={GameRoom} />
+          <GameProvider>
+            <Route path="/game" component={GameRoom} />
+          </GameProvider>
           <Route component={NotFound} />
         </Switch>
       </Flex>
