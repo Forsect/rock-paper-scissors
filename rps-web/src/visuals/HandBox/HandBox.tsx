@@ -10,6 +10,7 @@ const HandBox = ({ children, onClick }: Types.Props) => {
       onClick={onClick}
       size={200}
       p={5}
+      cursor="pointer"
       borderWidth="5px"
       borderColor={handsColor}
       borderRadius="50"

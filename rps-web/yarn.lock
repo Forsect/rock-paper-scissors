@@ -1303,6 +1303,21 @@
   dependencies:
     "@chakra-ui/utils" "1.5.2"
 
+"@chakra-ui/icon@1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icon/-/icon-1.1.8.tgz#fbee1c8e0ae848daeb05275049f0764d854dca59"
+  integrity sha512-kbIPtRd9pD/iTXyzRn2s10w4uX54nNTnoNy/wP0k1145lOHPtlumRMJNSV6cxy+pnwS/YN6xNACfKy6yRQyIVA==
+  dependencies:
+    "@chakra-ui/utils" "1.7.0"
+
+"@chakra-ui/icons@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-1.0.12.tgz#c9c25a21399638956696e026eeff1390654ee4d6"
+  integrity sha512-ubMXJkohCVLjCe+5JTy4jYuSqBGXRCAqOSRV6IE/phEd8+qfWLFOVa9Q6X0FvdM7HGco8mCFwtlZPwJvHNtyLg==
+  dependencies:
+    "@chakra-ui/icon" "1.1.8"
+    "@types/react" "^17.0.0"
+
 "@chakra-ui/image@1.0.12":
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@chakra-ui/image/-/image-1.0.12.tgz#51495d36a9dccd4e90fe65ff5fcec3e11cc2ecd2"
@@ -1666,6 +1681,16 @@
   dependencies:
     "@types/lodash.mergewith" "4.6.6"
     css-box-model "1.2.1"
+    lodash.mergewith "4.6.2"
+
+"@chakra-ui/utils@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.7.0.tgz#21c4807f56487284b93773da22665b63730a784c"
+  integrity sha512-fMZOnWBh/TzAYufkpeVw3yMNxKmYHEkB93luDpIJgxGt4mrbl+A66pd5GvJSGK1N34WYbjWRiJrrSvRI548eZA==
+  dependencies:
+    "@types/lodash.mergewith" "4.6.6"
+    css-box-model "1.2.1"
+    framesync "5.3.0"
     lodash.mergewith "4.6.2"
 
 "@chakra-ui/visually-hidden@1.0.9":
@@ -2582,6 +2607,15 @@
   version "16.14.5"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.5.tgz#2c39b5cadefaf4829818f9219e5e093325979f4d"
   integrity sha512-YRRv9DNZhaVTVRh9Wmmit7Y0UFhEVqXqCSw3uazRWMxa2x85hWQZ5BN24i7GXZbaclaLXEcodEeIHsjBA8eAMw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^17.0.0":
+  version "17.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.4.tgz#a67c6f7a460d2660e950d9ccc1c2f18525c28220"
+  integrity sha512-onz2BqScSFMoTRdJUZUDD/7xrusM8hBA2Fktk2qgaTYPCgPvWnDEgkrOs8hhPUf2jfcIXkJ5yK6VfYormJS3Jw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -12434,7 +12468,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.1.0:
+typescript@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.4.tgz#8610b59747de028fda898a8aef0e103f156d0961"
   integrity sha512-V+evlYHZnQkaz8TRBuxTA92yZBPotr5H+WhQ7bD3hZUndx5tGOa1fuCgeSjxAzM1RiN5IzvadIXTVefuuwZCRg==

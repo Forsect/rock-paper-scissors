@@ -1,8 +1,9 @@
-import { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
+import { GameRoomStates } from "shared/enums";
 
 export interface Props {
   children: React.ReactNode;
 }
 
-export interface IGameContext {}
+export interface IGameContext {
+  roomState: GameRoomStates;
+}

@@ -1,4 +1,4 @@
-import { Box, Circle } from "@chakra-ui/layout";
+import { Text, Circle } from "@chakra-ui/layout";
 import { useColorModeValue } from "@chakra-ui/react";
 import * as Types from "./HandFight.types";
 import PlayerHand from "./PlayerHand";
@@ -21,9 +21,9 @@ const HandFight = ({ opponent }: Types.Props) => {
       {playerHand ? (
         <PlayerHand hand={playerHand} />
       ) : (
-        <Box fontSize={20} fontWeight="bold">
+        <Text fontSize={20} fontWeight="bold">
           {opponent ? "Opponent's still picking..." : "Pick hand!"}
-        </Box>
+        </Text>
       )}
     </Circle>
   );
