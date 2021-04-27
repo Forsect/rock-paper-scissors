@@ -1,15 +1,12 @@
 import { Text, Circle } from "@chakra-ui/layout";
-import { useColorModeValue } from "@chakra-ui/react";
+import { Flex, Spinner, useColorModeValue } from "@chakra-ui/react";
 import * as Types from "./HandFight.types";
 import PlayerHand from "./PlayerHand";
-import { useState } from "react";
-import { Hands } from "shared/enums";
 import colors from "shared/colors";
+import { CheckCircleIcon } from "@chakra-ui/icons";
 
-const HandFight = ({ opponent }: Types.Props) => {
+const HandFight = ({ playerHand, opponent, isVisible }: Types.Props) => {
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
-
-  const [playerHand, setPlayerHand] = useState<Hands | null>(null);
 
   return (
     <Circle
@@ -18,11 +15,31 @@ const HandFight = ({ opponent }: Types.Props) => {
       p={5}
       borderColor={handsColor}
     >
-      {playerHand ? (
+      {opponent ? (
+        playerHand ? (
+          isVisible ? (
+            <PlayerHand hand={playerHand} />
+          ) : (
+            <Flex flexDir="column" align="center" pb={8}>
+              <CheckCircleIcon boxSize={12} color={handsColor} />
+              <Text fontWeight="bold" fontSize={20} mt={8}>
+                Opponent made a pick!
+              </Text>
+            </Flex>
+          )
+        ) : (
+          <Flex flexDir="column" align="center" pb={8}>
+            <Spinner speed="1.5s" size="xl" color={handsColor} />
+            <Text fontWeight="bold" fontSize={20} mt={8}>
+              Opponent's still picking...
+            </Text>
+          </Flex>
+        )
+      ) : playerHand ? (
         <PlayerHand hand={playerHand} />
       ) : (
-        <Text fontSize={20} fontWeight="bold">
-          {opponent ? "Opponent's still picking..." : "Pick hand!"}
+        <Text fontWeight="bold" fontSize={24}>
+          Pick hand!
         </Text>
       )}
     </Circle>

@@ -25,10 +25,13 @@ const GameRoom = () => {
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
   const sendLink = `http://localhost:3000/game/${id}`;
   const { hasCopied, onCopy } = useClipboard(sendLink);
-  const { roomState } = useGameContext();
+  const {
+    roomState,
+    setPlayerHandHandler,
+    playerHand,
+    opponentHand,
+  } = useGameContext();
   const toast = useToast();
-  const [mainPlayerHand, setMainPlayerHand] = useState<Hands | null>(null);
-  const [enemyPlayerHand, setEnemyPlayerHand] = useState<Hands | null>(null);
 
   useToastOnUserLeave({ roomState });
 
@@ -37,6 +40,8 @@ const GameRoom = () => {
       toast.closeAll();
     };
   }, []);
+
+  // useEffect(() => {}, [playerHand, opponentHand]);
 
   return (
     <Flex flex={1} direction="column">
@@ -90,28 +95,32 @@ const GameRoom = () => {
             pb={12}
             mt={4}
           >
-            <HandFight opponent />
+            <HandFight
+              opponent
+              isVisible={!!playerHand && !!opponentHand}
+              playerHand={opponentHand}
+            />
             <Box h={4} />
-            <HandFight />
+            <HandFight playerHand={playerHand} />
           </Flex>
 
           <Flex flex={1} align="center">
             <Flex flex={1.5} />
 
             <Flex flex={3} justifyContent="space-around">
-              <HandBox onClick={() => setMainPlayerHand(Hands.Rock)}>
+              <HandBox onClick={() => setPlayerHandHandler(Hands.Rock)}>
                 <RockHand fill={handsColor} />
               </HandBox>
 
               <Flex flex="1 0 16px" />
 
-              <HandBox onClick={() => setMainPlayerHand(Hands.Paper)}>
+              <HandBox onClick={() => setPlayerHandHandler(Hands.Paper)}>
                 <PaperHand fill={handsColor} stroke={handsColor} />
               </HandBox>
 
               <Flex flex="1 0 16px" />
 
-              <HandBox onClick={() => setMainPlayerHand(Hands.Scissors)}>
+              <HandBox onClick={() => setPlayerHandHandler(Hands.Scissors)}>
                 <ScissorsHand fill={handsColor} stroke={handsColor} />
               </HandBox>
             </Flex>
