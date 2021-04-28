@@ -1,16 +1,16 @@
 import express from "express";
 import { createServer } from "http";
-import { Hands } from "shared/enums";
+import { Hands } from "./shared/enums";
 import { Server } from "socket.io";
 import * as chalker from "./chalker";
-// import { GameRoom } from "./shared/types";
+import * as roomUtils from "./utils/roomUtils";
+import { GameRoom } from "./shared/types";
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-let blockedRooms: string[] = [];
-// let gameRooms: GameRoom[] = [];
+let gameRooms: GameRoom[] = [];
 
 server.listen(4000, () => {
   console.log("listening on *:4000");
@@ -20,50 +20,93 @@ io.on("connection", (socket) => {
   console.log(`user ${socket.id} connected`);
 
   socket.on("user:connecting", (roomId: string) => {
-    if (blockedRooms.includes(roomId)) {
-      chalker.logRedMessage(`room ${roomId} is blocked!`);
-      socket.emit("room:blocked");
-      return;
-    }
+    const foundRoom = gameRooms.find((x) => x.roomId === roomId);
 
-    const room = io.of("/").adapter.rooms.get(roomId);
-
-    if (!room) {
+    if (!foundRoom) {
+      gameRooms = [
+        ...gameRooms,
+        {
+          roomId: roomId,
+          host: socket.id,
+          hostHand: Hands.None,
+          opponentHand: Hands.None,
+        },
+      ];
       socket.join(roomId);
       socket.emit("room:create");
       chalker.logGreenMessage(`user ${socket.id} created the room: ${roomId}`);
-    } else if (room.size >= 2) {
+      return;
+    }
+
+    if (foundRoom.opponent) {
       socket.emit("room:full");
       chalker.logRedMessage(`room ${roomId} is full!`);
-    } else {
-      socket.join(roomId);
-      io.to(roomId).emit("room:ready");
-      chalker.logBlueMessage(`user ${socket.id} joined the room: ${roomId}`);
+      return;
     }
+
+    gameRooms = gameRooms.map((gameRoom) =>
+      gameRoom.roomId === foundRoom.roomId
+        ? ({ ...foundRoom, opponent: socket.id } as GameRoom)
+        : gameRoom
+    );
+
+    socket.join(roomId);
+    io.to(foundRoom.roomId).emit("room:ready");
+    chalker.logBlueMessage(`user ${socket.id} joined the room: ${roomId}`);
   });
 
   socket.on("user:setHand", (hand: Hands) => {
-    const sids = io.of("/").adapter.sids.get(socket.id)!;
-    const gameRoomId = [...sids].find((x) => x !== socket.id)!;
-    const gameRoom = io.of("/").adapter.rooms.get(gameRoomId)!;
-    const opponentSocket = [...gameRoom].find((x) => x !== socket.id)!;
+    const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
 
-    socket.emit("user:playerHand", hand);
-    socket.to(opponentSocket).emit("user:booleeasdas", hand);
+    if (foundRoom.host === socket.id) {
+      if (foundRoom.hostHand === Hands.None) {
+        gameRooms = gameRooms.map((gameRoom) =>
+          gameRoom.roomId === foundRoom.roomId
+            ? ({ ...foundRoom, hostHand: hand } as GameRoom)
+            : gameRoom
+        );
+        socket.emit("user:playerHand", hand);
+        io.to(foundRoom.opponent!).emit("room:opponentReady");
+      }
+    } else {
+      if (foundRoom.opponentHand === Hands.None) {
+        gameRooms = gameRooms.map((gameRoom) =>
+          gameRoom.roomId === foundRoom.roomId
+            ? ({ ...foundRoom, opponentHand: hand } as GameRoom)
+            : gameRoom
+        );
+        socket.emit("user:playerHand", hand);
+        io.to(foundRoom.host!).emit("room:opponentReady");
+      }
+    }
+  });
+
+  socket.on("room:showdown", () => {
+    const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
+
+    if (foundRoom.host === socket.id) {
+      socket.emit("user:opponentHand", foundRoom.opponentHand);
+      chalker.logOrangeMessage(`room ${foundRoom.roomId} did showdown`);
+    } else {
+      socket.emit("user:opponentHand", foundRoom.hostHand);
+    }
   });
 });
 
 io.of("/").adapter.on("leave-room", (roomId, id) => {
   if (roomId !== id) {
     chalker.logYellowMessage(`user ${id} has left the room ${roomId}`);
-    blockedRooms = [...blockedRooms, roomId];
+    io.to(roomId).emit("room:left");
   }
-  io.to(roomId).emit("room:left");
 });
 
-io.of("/").adapter.on("delete-room", (roomId) => {
-  blockedRooms = blockedRooms.filter((x) => {
-    console.log(`room ${roomId} was deleted`);
-    return x !== roomId;
-  });
+io.of("/").adapter.on("delete-room", (roomId: string) => {
+  const foundRoom = gameRooms.find((x) => x.roomId === roomId);
+  if (foundRoom) {
+    gameRooms = gameRooms.filter((x) =>
+      roomUtils.filterRooms(x, foundRoom.roomId, () => {
+        chalker.logRedMessage(`room ${foundRoom.roomId} was deleted`);
+      })
+    );
+  }
 });

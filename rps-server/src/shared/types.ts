@@ -1,9 +1,9 @@
 import { Hands } from "./enums";
 
 export interface GameRoom {
-  host: string;
-  opponent: string;
   roomId: string;
+  host: string;
+  opponent?: string;
   hostHand: Hands;
   opponentHand: Hands;
 }
