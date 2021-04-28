@@ -19,12 +19,12 @@ import colors from "shared/colors";
 import useGameContext from "./../../hooks/useGameContext";
 import { useParams } from "react-router-dom";
 import useToastOnUserLeave from "hooks/useToastOnUserLeave";
-import * as gameRoomUtils from "utils/gameRoomUtils";
+import gameRoomUtils from "utils/gameRoomUtils";
 
 const GameRoom = () => {
   const { id } = useParams<{ id: string }>();
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
-  const sendLink = `http://localhost:3000/game/${id}`;
+  const sendLink = `${process.env.REACT_APP_FRONTEND_URL}/game/${id}`;
   const { hasCopied, onCopy } = useClipboard(sendLink);
   const {
     roomState,

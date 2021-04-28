@@ -6,7 +6,7 @@ import { GameRoomStates, Hands } from "shared/enums";
 
 export const GameContext = createContext<Types.IGameContext | null>(null);
 
-const socket = io("http://localhost:4000");
+const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 const GameProvider = ({ children }: Types.Props) => {
   const { id } = useParams<{ id: string }>();
