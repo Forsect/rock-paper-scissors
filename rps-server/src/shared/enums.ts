@@ -1,6 +1,6 @@
 export enum Hands {
-  None,
   Rock,
   Paper,
   Scissors,
-}
+  None,
+} //Order must be kept for proper winner calculation

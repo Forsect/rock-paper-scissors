@@ -1,4 +1,3 @@
-import express from "express";
 import { createServer } from "http";
 import { Hands } from "./shared/enums";
 import { Server } from "socket.io";
@@ -6,8 +5,7 @@ import * as chalker from "./chalker";
 import * as roomUtils from "./utils/roomUtils";
 import { GameRoom } from "./shared/types";
 
-const app = express();
-const server = createServer(app);
+const server = createServer();
 const io = new Server(server, { cors: { origin: "*" } });
 
 let gameRooms: GameRoom[] = [];

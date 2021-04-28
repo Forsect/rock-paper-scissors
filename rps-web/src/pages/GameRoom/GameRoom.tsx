@@ -11,7 +11,7 @@ import {
 import PaperHand from "visuals/PaperHand/PaperHand";
 import RockHand from "visuals/RockHand/RockHand";
 import ScissorsHand from "visuals/ScissorsHand/ScissorsHand";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import HandBox from "visuals/HandBox";
 import HandFight from "visuals/HandFight";
 import { GameRoomStates, Hands } from "shared/enums";
@@ -19,6 +19,7 @@ import colors from "shared/colors";
 import useGameContext from "./../../hooks/useGameContext";
 import { useParams } from "react-router-dom";
 import useToastOnUserLeave from "hooks/useToastOnUserLeave";
+import * as gameRoomUtils from "utils/gameRoomUtils";
 
 const GameRoom = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,8 +30,13 @@ const GameRoom = () => {
     roomState,
     setPlayerHandHandler,
     playerHand,
+    isOpponentReady,
     opponentHand,
+    showdown,
   } = useGameContext();
+  const [isOpponentVisible, setIsOpponentVisible] = useState(false);
+  const [playerColor, setPlayerColor] = useState("");
+  const [opponentColor, setOpponentColor] = useState("");
   const toast = useToast();
 
   useToastOnUserLeave({ roomState });
@@ -39,9 +45,28 @@ const GameRoom = () => {
     return () => {
       toast.closeAll();
     };
+    // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {}, [playerHand, opponentHand]);
+  useEffect(() => {
+    if (playerHand !== Hands.None && isOpponentReady) {
+      showdown();
+      setIsOpponentVisible(true);
+    }
+    // eslint-disable-next-line
+  }, [playerHand, isOpponentReady]);
+
+  useEffect(() => {
+    if (opponentHand !== Hands.None) {
+      gameRoomUtils.getGameResult(
+        playerHand,
+        opponentHand,
+        setPlayerColor,
+        setOpponentColor
+      );
+    }
+    // eslint-disable-next-line
+  }, [opponentHand]);
 
   return (
     <Flex flex={1} direction="column">
@@ -97,11 +122,13 @@ const GameRoom = () => {
           >
             <HandFight
               opponent
-              isVisible={!!playerHand && !!opponentHand}
+              isVisible={isOpponentVisible}
+              isOpponentReady={isOpponentReady}
+              fillColor={opponentColor}
               playerHand={opponentHand}
             />
             <Box h={4} />
-            <HandFight playerHand={playerHand} />
+            <HandFight fillColor={playerColor} playerHand={playerHand} />
           </Flex>
 
           <Flex flex={1} align="center">

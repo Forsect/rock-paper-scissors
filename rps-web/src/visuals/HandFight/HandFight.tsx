@@ -4,8 +4,15 @@ import * as Types from "./HandFight.types";
 import PlayerHand from "./PlayerHand";
 import colors from "shared/colors";
 import { CheckCircleIcon } from "@chakra-ui/icons";
+import { Hands } from "shared/enums";
 
-const HandFight = ({ playerHand, opponent, isVisible }: Types.Props) => {
+const HandFight = ({
+  playerHand,
+  opponent,
+  isVisible,
+  isOpponentReady,
+  fillColor,
+}: Types.Props) => {
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
 
   return (
@@ -13,10 +20,10 @@ const HandFight = ({ playerHand, opponent, isVisible }: Types.Props) => {
       size={opponent ? 300 : 250}
       borderWidth="5px"
       p={5}
-      borderColor={handsColor}
+      borderColor={fillColor ? fillColor : handsColor}
     >
       {opponent ? (
-        playerHand ? (
+        isOpponentReady ? (
           isVisible ? (
             <PlayerHand hand={playerHand} />
           ) : (
@@ -35,7 +42,7 @@ const HandFight = ({ playerHand, opponent, isVisible }: Types.Props) => {
             </Text>
           </Flex>
         )
-      ) : playerHand ? (
+      ) : playerHand !== Hands.None ? (
         <PlayerHand hand={playerHand} />
       ) : (
         <Text fontWeight="bold" fontSize={24}>

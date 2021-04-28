@@ -12,6 +12,7 @@ const GameProvider = ({ children }: Types.Props) => {
   const { id } = useParams<{ id: string }>();
   const [roomState, setRoomState] = useState(GameRoomStates.Loading);
   const [playerHand, setPlayerHand] = useState(Hands.None);
+  const [isOpponentReady, setIsOpponentReady] = useState(false);
   const [opponentHand, setOpponentHand] = useState(Hands.None);
 
   useEffect(() => {
@@ -31,20 +32,36 @@ const GameProvider = ({ children }: Types.Props) => {
 
     socket.on("user:playerHand", (hand: Hands) => setPlayerHand(hand));
 
+    socket.on("room:opponentReady", () => setIsOpponentReady(true));
+
     socket.on("user:opponentHand", (hand: Hands) => setOpponentHand(hand));
 
     return () => {
       socket.disconnect();
     };
+    // eslint-disable-next-line
   }, []);
 
   const setPlayerHandHandler = (hand: Hands) => {
+    console.log(hand);
+    console.log(playerHand);
     socket.emit("user:setHand", hand);
+  };
+
+  const showdown = () => {
+    socket.emit("room:showdown");
   };
 
   return (
     <GameContext.Provider
-      value={{ roomState, setPlayerHandHandler, playerHand, opponentHand }}
+      value={{
+        roomState,
+        setPlayerHandHandler,
+        playerHand,
+        isOpponentReady,
+        opponentHand,
+        showdown,
+      }}
     >
       {children}
     </GameContext.Provider>

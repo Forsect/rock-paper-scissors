@@ -48,6 +48,7 @@ const useToastOnUserLeave = ({ roomState }: Types.Props) => {
         ),
       });
     }
+    // eslint-disable-next-line
   }, [roomState]);
 };
 
