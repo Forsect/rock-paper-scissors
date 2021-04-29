@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts",
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts"
   },
   "dependencies": {
     "chalk": "^4.1.1",
