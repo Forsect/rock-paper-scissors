@@ -43,8 +43,6 @@ const GameProvider = ({ children }: Types.Props) => {
   }, []);
 
   const setPlayerHandHandler = (hand: Hands) => {
-    console.log(hand);
-    console.log(playerHand);
     socket.emit("user:setHand", hand);
   };
 

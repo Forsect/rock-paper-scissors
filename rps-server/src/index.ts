@@ -56,6 +56,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("user:setHand", (hand: Hands) => {
+    if (!(hand in Hands)) {
+      chalker.logRedMessage(
+        `'${hand}' was not recognized as proper hand value`
+      );
+      return;
+    }
+
     const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
 
     if (foundRoom.host === socket.id) {
