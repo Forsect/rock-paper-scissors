@@ -9,16 +9,16 @@ const useHerokuToastOnBoot = ({ roomState }: Types.Props) => {
 
   useEffect(() => {
     const herokuToast = setTimeout(() => {
-      if (roomState === GameRoomStates.Waiting) {
+      if (roomState === GameRoomStates.Loading) {
         herokuToastRef.current = toast({
           title: "Heroku is booting!",
           description: "Server has been frozen. Wait around 20s to proceed.",
           duration: null,
         });
       }
-    }, 2500);
+    }, 3000);
 
-    if (roomState === GameRoomStates.Waiting) {
+    if (roomState !== GameRoomStates.Loading) {
       clearTimeout(herokuToast);
       toast.close(herokuToastRef.current!);
     }
@@ -26,6 +26,7 @@ const useHerokuToastOnBoot = ({ roomState }: Types.Props) => {
     return () => {
       clearTimeout(herokuToast);
     };
+    // eslint-disable-next-line
   }, [roomState]);
 };
 
