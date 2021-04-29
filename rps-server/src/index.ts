@@ -5,13 +5,15 @@ import * as chalker from "./chalker";
 import * as roomUtils from "./utils/roomUtils";
 import { GameRoom } from "./shared/types";
 
+const PORT = process.env.PORT || 4000;
+
 const server = createServer();
 const io = new Server(server, { cors: { origin: "*" } });
 
 let gameRooms: GameRoom[] = [];
 
-server.listen(4000, () => {
-  console.log("listening on *:4000");
+server.listen(PORT, () => {
+  console.log(`listening on *:${PORT}`);
 });
 
 io.on("connection", (socket) => {
