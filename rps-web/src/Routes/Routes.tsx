@@ -12,12 +12,11 @@ const Routes = () => {
   const GameProvider = lazy(() => import("providers/GameProvider"));
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      <Flex direction="column" minH="100vh" p={4}>
-        <Flex justifyContent="flex-end">
-          <ColorModeSwitcher />
-        </Flex>
-
+    <Flex direction="column" minH="100vh" p={4}>
+      <Flex justifyContent="flex-end">
+        <ColorModeSwitcher />
+      </Flex>
+      <Suspense fallback={<LoadingScreen />}>
         <Switch>
           <Route path="/" exact component={HomePage} />
           <Route
@@ -31,8 +30,8 @@ const Routes = () => {
           />
           <Route component={NotFound} />
         </Switch>
-      </Flex>
-    </Suspense>
+      </Suspense>
+    </Flex>
   );
 };
 

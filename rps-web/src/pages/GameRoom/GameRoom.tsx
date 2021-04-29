@@ -16,15 +16,18 @@ import HandBox from "visuals/HandBox";
 import HandFight from "visuals/HandFight";
 import { GameRoomStates, Hands } from "shared/enums";
 import colors from "shared/colors";
+import path from "path";
 import useGameContext from "./../../hooks/useGameContext";
 import { useParams } from "react-router-dom";
 import useToastOnUserLeave from "hooks/useToastOnUserLeave";
 import gameRoomUtils from "utils/gameRoomUtils";
+import LoadingScreen from "visuals/LoadingScreen";
+import useHerokuToastOnBoot from "hooks/useHerokuToastOnBoot";
 
 const GameRoom = () => {
   const { id } = useParams<{ id: string }>();
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
-  const sendLink = `${process.env.REACT_APP_FRONTEND_URL}/game/${id}`;
+  const sendLink = path.join(process.env.REACT_APP_FRONTEND_URL, "game", id);
   const { hasCopied, onCopy } = useClipboard(sendLink);
   const {
     roomState,
@@ -40,6 +43,8 @@ const GameRoom = () => {
   const toast = useToast();
 
   useToastOnUserLeave({ roomState });
+
+  useHerokuToastOnBoot({ roomState });
 
   useEffect(() => {
     return () => {
@@ -70,6 +75,7 @@ const GameRoom = () => {
 
   return (
     <Flex flex={1} direction="column">
+      {roomState === GameRoomStates.Loading && <LoadingScreen />}
       {roomState === GameRoomStates.Waiting && (
         <Flex
           flex={1}
@@ -90,7 +96,7 @@ const GameRoom = () => {
             placement="top"
           >
             <Input
-              maxW={650}
+              maxW={950}
               p={8}
               borderColor={handsColor}
               borderWidth={4}
