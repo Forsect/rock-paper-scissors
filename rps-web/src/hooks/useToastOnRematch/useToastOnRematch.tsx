@@ -4,9 +4,15 @@ import * as Types from "./useToastOnRematch.types";
 
 const useToastOnRematch = ({ opponentWantsRematch }: Types.Props) => {
   const toast = useToast();
+
   useEffect(() => {
     if (opponentWantsRematch) {
-      toast({ title: "Opponent wants rematch!", position: "top", duration: null, status: "info", isClosable: true });
+      toast({
+        title: "Opponent wants a rematch!",
+        position: "top",
+        duration: null,
+        status: "info",
+      });
     }
 
     return () => {

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import * as Types from "./GameProvider.types";
@@ -7,16 +7,6 @@ import gameRoomUtils from "utils/gameRoomUtils";
 import useSocketListeners from "hooks/useSocketListeners";
 
 export const GameContext = createContext<Types.IGameContext | null>(null);
-
-const socket = io(process.env.REACT_APP_BACKEND_URL);
-
-const setPlayerHandHandler = (hand: Hands) => {
-  socket.emit("user:setHand", hand);
-};
-
-const showdown = () => {
-  socket.emit("room:showdown");
-};
 
 const GameProvider = ({ children }: Types.Props) => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +19,21 @@ const GameProvider = ({ children }: Types.Props) => {
   const [gameResult, setGameResult] = useState(GameResult.Playing);
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
+  const socketRef = useRef(io(process.env.REACT_APP_BACKEND_URL));
+  const socket = socketRef.current;
+
+  const setPlayerHandHandler = (hand: Hands) => {
+    socket.emit("user:setHand", hand);
+  };
+
+  const showdown = () => {
+    socket.emit("room:showdown");
+  };
+
+  const rematch = () => {
+    setRematchSuggested(true);
+    socket.emit("room:rematch");
+  };
 
   const playRematch = () => {
     setGameResult(GameResult.Playing);
@@ -39,16 +44,12 @@ const GameProvider = ({ children }: Types.Props) => {
     setRematchSuggested(false);
   };
 
-  const rematch = () => {
-    setRematchSuggested(true);
-    socket.emit("room:rematch");
-  };
-
   useEffect(() => {
     if (!socket.connected) socket.connect();
     socket.emit("user:connecting", id);
 
     return () => {
+      // socket.off("room:create");
       socket.disconnect();
     };
     // eslint-disable-next-line

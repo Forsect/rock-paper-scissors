@@ -22,6 +22,7 @@ const GameRoomWaiting = ({ sendLink }: Types.Props) => {
         <Input
           maxW={950}
           p={8}
+          readOnly={true}
           borderColor={handsColor}
           borderWidth={4}
           fontSize={32}

@@ -26,14 +26,16 @@ const ToastOnUserLeave = ({ historyPush }: Types.Props) => {
         <Text fontWeight="bold"> Opponent has left the room!</Text>
         <Text fontSize={12}>Click to play again!</Text>
       </Flex>
-      <Button size="xs">
-        <CloseIcon
-          boxSize={2}
-          onClick={(e) => {
-            toast.closeAll();
-            e.stopPropagation();
-          }}
-        />
+      <Button
+        onClick={(e) => {
+          toast.closeAll();
+          e.stopPropagation();
+        }}
+        bgColor={"orange.200"}
+        _hover={{ bgColor: "orange.100" }}
+        size="xs"
+      >
+        <CloseIcon boxSize={2} />
       </Button>
     </Flex>
   );
