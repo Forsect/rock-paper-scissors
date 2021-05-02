@@ -29,7 +29,7 @@ const GameRoom = () => {
     case GameRoomStates.Full:
       return (
         <Flex flex={1} justifyContent="center" align="center">
-          <Text fontWeight="black" fontSize={48}>
+          <Text fontWeight="black" fontSize={[32, 36, 48]}>
             Room is full!
           </Text>
         </Flex>
@@ -37,10 +37,10 @@ const GameRoom = () => {
     case GameRoomStates.Error:
       return (
         <Flex flex={1} flexDir="column" justifyContent="center" align="center">
-          <Text fontWeight="black" fontSize={48}>
+          <Text fontWeight="black" fontSize={[20, 28, 48]}>
             {"Something went wrong :("}
           </Text>
-          <Text mt={4} fontSize={32}>
+          <Text mt={4} fontSize={[16, 24, 32]}>
             Try again with new game!
           </Text>
           <Button mt={8} border={`2px ${handsColor} solid`} onClick={() => history.push("/")}>

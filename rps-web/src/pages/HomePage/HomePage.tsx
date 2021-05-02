@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <Flex flex={1} justifyContent="center" align="center">
       <Circle
-        size={300}
+        size={[200, 300]}
         borderWidth={5}
         p={5}
         cursor="pointer"
@@ -19,7 +19,7 @@ const HomePage = () => {
           history.push(`/game/${roomId}`);
         }}
       >
-        <Text fontSize={64} fontWeight="black">
+        <Text fontSize={[32, 64]} fontWeight="black">
           PLAY!
         </Text>
       </Circle>

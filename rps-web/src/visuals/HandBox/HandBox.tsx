@@ -8,12 +8,12 @@ const HandBox = ({ children, onClick }: Types.Props) => {
   return (
     <Square
       onClick={onClick}
-      size={170}
-      p={5}
+      size={["90px", "140px", "200px"]}
+      p={[2, 3, 5]}
       cursor="pointer"
-      borderWidth="5px"
+      borderWidth={[2, 3, 5]}
       borderColor={handsColor}
-      borderRadius="50"
+      borderRadius={[30, 40, 50]}
       _hover={{ _active: { transform: "scale(0.9)" } }}
     >
       {children}

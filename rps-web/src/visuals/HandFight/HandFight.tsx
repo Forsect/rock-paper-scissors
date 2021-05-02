@@ -42,17 +42,17 @@ const HandFight = ({ playerHand, opponent, isOpponentReady }: Types.Props) => {
       playerHand !== Hands.None ? (
         <PlayerHand hand={playerHand} />
       ) : (
-        <Flex flexDir="column" align="center" pb={8}>
-          <CheckCircleIcon boxSize={12} color={handsColor} />
-          <Text fontWeight="bold" fontSize={16} mt={8}>
+        <Flex flexDir="column" align="center" pb={[4, 8]}>
+          <CheckCircleIcon boxSize={[8, 10, 16]} color={handsColor} />
+          <Text align="center" fontWeight="bold" fontSize={[12, 16]} mt={[4, 8]}>
             Opponent made a pick!
           </Text>
         </Flex>
       )
     ) : (
-      <Flex flexDir="column" align="center" pb={8}>
-        <Spinner speed="1.5s" size="xl" color={handsColor} />
-        <Text fontWeight="bold" fontSize={16} mt={8}>
+      <Flex flexDir="column" align="center" pb={[4, 8]}>
+        <Spinner speed="1.5s" w={[8, 10, 16]} h={[8, 10, 16]} color={handsColor} />
+        <Text align="center" fontWeight="bold" fontSize={[12, 16]} mt={[4, 8]}>
           Opponent's still picking...
         </Text>
       </Flex>
@@ -62,13 +62,18 @@ const HandFight = ({ playerHand, opponent, isOpponentReady }: Types.Props) => {
     playerHand !== Hands.None ? (
       <PlayerHand hand={playerHand} />
     ) : (
-      <Text fontWeight="bold" fontSize={20}>
+      <Text fontWeight="bold" fontSize={[16, 20]}>
         Pick hand!
       </Text>
     );
 
   return (
-    <Circle size={opponent ? 250 : 200} borderWidth="5px" p={5} borderColor={getFillColor()}>
+    <Circle
+      size={opponent ? ["140px", "200px", "250px"] : ["120px", "160px", "200px"]}
+      borderWidth={[2, 3, 5]}
+      p={[3, 5]}
+      borderColor={getFillColor()}
+    >
       {opponent ? <OpponentHand /> : <Hand />}
     </Circle>
   );

@@ -19,7 +19,7 @@ const GameProvider = ({ children }: Types.Props) => {
   const [gameResult, setGameResult] = useState(GameResult.Playing);
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
-  const socketRef = useRef(io(process.env.REACT_APP_BACKEND_URL));
+  const socketRef = useRef(io(process.env.REACT_APP_BACKEND_URL, { autoConnect: false }));
   const socket = socketRef.current;
 
   const setPlayerHandHandler = (hand: Hands) => {
@@ -51,6 +51,7 @@ const GameProvider = ({ children }: Types.Props) => {
     return () => {
       // socket.off("room:create");
       socket.disconnect();
+      // socketRef.current = null;
     };
     // eslint-disable-next-line
   }, []);

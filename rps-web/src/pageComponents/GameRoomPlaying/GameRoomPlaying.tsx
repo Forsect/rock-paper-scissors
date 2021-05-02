@@ -31,23 +31,25 @@ const GameRoomPlaying = () => {
 
   return (
     <>
-      <Flex flex={1} flexDirection="column" justifyContent="space-between" align="center" pb={4} mt={8}>
+      <Flex flex={1} flexDirection="column" justifyContent="space-between" align="center" pt={{ md: 6 }}>
         <HandFight opponent isOpponentReady={isOpponentReady} playerHand={opponentHand} />
         <Flex flex={1} flexDir="column" justifyContent="space-between" align="center" py={4}>
           <Fade in={!!(playerScore | opponentScore)}>
-            <Text fontSize={20} fontWeight="bold">
+            <Text fontSize={[12, 16, 20]} fontWeight="bold">
               {opponentScore}
             </Text>
           </Fade>
 
-          <Fade in={opponentHand !== Hands.None && roomState !== GameRoomStates.Left} unmountOnExit>
-            <Button w="120px" border={`2px ${handsColor} solid`} onClick={rematch}>
-              {rematchSuggested ? <Spinner speed="0.8s" /> : "Rematch!"}
-            </Button>
-          </Fade>
+          <Flex flex="0 0 80px" align="center">
+            <Fade in={opponentHand !== Hands.None && roomState !== GameRoomStates.Left} unmountOnExit>
+              <Button my={4} w={["80px", "100px", "120px"]} border={`2px ${handsColor} solid`} onClick={rematch}>
+                {rematchSuggested ? <Spinner speed="0.8s" /> : <Text fontSize={[12, 16]}>Rematch!</Text>}
+              </Button>
+            </Fade>
+          </Flex>
 
           <Fade in={!!(playerScore | opponentScore)}>
-            <Text fontSize={20} fontWeight="bold">
+            <Text fontSize={[12, 16, 20]} fontWeight="bold">
               {playerScore}
             </Text>
           </Fade>
@@ -56,28 +58,20 @@ const GameRoomPlaying = () => {
         <HandFight playerHand={playerHand} />
       </Flex>
 
-      <Flex flex={0} mb={4} mt={8} align="center">
-        <Flex flex={1.5} />
+      <Flex flex={0} mb={[2]} mt={[4, 8]} align="center" justify="center">
+        <HandBox onClick={() => setPlayerHandHandler(Hands.Rock)}>
+          <RockHand fill={handsColor} />
+        </HandBox>
 
-        <Flex flex={3} justifyContent="space-around">
-          <HandBox onClick={() => setPlayerHandHandler(Hands.Rock)}>
-            <RockHand fill={handsColor} />
-          </HandBox>
-
-          <Flex flex="1 0 16px" />
-
+        <Flex flex={0} mx={[4, null, 12, 32]}>
           <HandBox onClick={() => setPlayerHandHandler(Hands.Paper)}>
             <PaperHand fill={handsColor} stroke={handsColor} />
           </HandBox>
-
-          <Flex flex="1 0 16px" />
-
-          <HandBox onClick={() => setPlayerHandHandler(Hands.Scissors)}>
-            <ScissorsHand fill={handsColor} stroke={handsColor} />
-          </HandBox>
         </Flex>
 
-        <Flex flex={1.5} />
+        <HandBox onClick={() => setPlayerHandHandler(Hands.Scissors)}>
+          <ScissorsHand fill={handsColor} stroke={handsColor} />
+        </HandBox>
       </Flex>
     </>
   );
