@@ -1,4 +1,4 @@
-import { GameRoomStates, Hands } from "shared/enums";
+import { GameResult, GameRoomStates, Hands } from "shared/enums";
 
 export interface Props {
   children: React.ReactNode;
@@ -10,5 +10,10 @@ export interface IGameContext {
   playerHand: Hands;
   isOpponentReady: boolean;
   opponentHand: Hands;
-  showdown: () => void;
+  rematch: () => void;
+  opponentWantsRematch: boolean;
+  gameResult: GameResult;
+  playerScore: number;
+  opponentScore: number;
+  rematchSuggested: boolean;
 }

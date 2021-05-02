@@ -6,4 +6,5 @@ export interface GameRoom {
   opponent?: string;
   hostHand: Hands;
   opponentHand: Hands;
+  rematch: string;
 }

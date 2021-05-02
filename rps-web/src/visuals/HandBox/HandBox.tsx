@@ -8,7 +8,7 @@ const HandBox = ({ children, onClick }: Types.Props) => {
   return (
     <Square
       onClick={onClick}
-      size={200}
+      size={170}
       p={5}
       cursor="pointer"
       borderWidth="5px"

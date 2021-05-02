@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { GameRoomStates } from "shared/enums";
 import * as Types from "./useHerokuToastOnBoot.types";
 
-const useHerokuToastOnBoot = ({ roomState }: Types.Props) => {
+const useToastOnHerokuBoot = ({ roomState }: Types.Props) => {
   const toast = useToast();
   const herokuToastRef = useRef<ToastId>();
 
@@ -25,9 +25,10 @@ const useHerokuToastOnBoot = ({ roomState }: Types.Props) => {
 
     return () => {
       clearTimeout(herokuToast);
+      toast.close(herokuToastRef.current!);
     };
     // eslint-disable-next-line
   }, [roomState]);
 };
 
-export default useHerokuToastOnBoot;
+export default useToastOnHerokuBoot;

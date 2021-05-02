@@ -3,7 +3,7 @@ export enum Hands {
   Paper,
   Scissors,
   None,
-} //Order must be kept for proper winner calculation
+}
 
 export enum GameRoomStates {
   Loading,
@@ -11,4 +11,12 @@ export enum GameRoomStates {
   Playing,
   Full,
   Left,
+  Error,
+}
+
+export enum GameResult {
+  Win,
+  Lose,
+  Draw,
+  Playing,
 }

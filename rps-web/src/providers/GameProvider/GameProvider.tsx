@@ -2,11 +2,21 @@ import { createContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import * as Types from "./GameProvider.types";
-import { GameRoomStates, Hands } from "shared/enums";
+import { GameResult, GameRoomStates, Hands } from "shared/enums";
+import gameRoomUtils from "utils/gameRoomUtils";
+import useSocketListeners from "hooks/useSocketListeners";
 
 export const GameContext = createContext<Types.IGameContext | null>(null);
 
 const socket = io(process.env.REACT_APP_BACKEND_URL);
+
+const setPlayerHandHandler = (hand: Hands) => {
+  socket.emit("user:setHand", hand);
+};
+
+const showdown = () => {
+  socket.emit("room:showdown");
+};
 
 const GameProvider = ({ children }: Types.Props) => {
   const { id } = useParams<{ id: string }>();
@@ -14,27 +24,29 @@ const GameProvider = ({ children }: Types.Props) => {
   const [playerHand, setPlayerHand] = useState(Hands.None);
   const [isOpponentReady, setIsOpponentReady] = useState(false);
   const [opponentHand, setOpponentHand] = useState(Hands.None);
+  const [opponentWantsRematch, setOpponentWantsRematch] = useState(false);
+  const [rematchSuggested, setRematchSuggested] = useState(false);
+  const [gameResult, setGameResult] = useState(GameResult.Playing);
+  const [playerScore, setPlayerScore] = useState(0);
+  const [opponentScore, setOpponentScore] = useState(0);
+
+  const playRematch = () => {
+    setGameResult(GameResult.Playing);
+    setPlayerHand(Hands.None);
+    setOpponentHand(Hands.None);
+    setIsOpponentReady(false);
+    setOpponentWantsRematch(false);
+    setRematchSuggested(false);
+  };
+
+  const rematch = () => {
+    setRematchSuggested(true);
+    socket.emit("room:rematch");
+  };
 
   useEffect(() => {
     if (!socket.connected) socket.connect();
-
     socket.emit("user:connecting", id);
-
-    socket.on("room:create", () => setRoomState(GameRoomStates.Waiting));
-
-    socket.on("room:ready", () => setRoomState(GameRoomStates.Playing));
-
-    socket.on("room:full", () => setRoomState(GameRoomStates.Full));
-
-    socket.on("room:left", () => setRoomState(GameRoomStates.Left));
-
-    socket.on("room:blocked", () => setRoomState(GameRoomStates.Full));
-
-    socket.on("user:playerHand", (hand: Hands) => setPlayerHand(hand));
-
-    socket.on("room:opponentReady", () => setIsOpponentReady(true));
-
-    socket.on("user:opponentHand", (hand: Hands) => setOpponentHand(hand));
 
     return () => {
       socket.disconnect();
@@ -42,13 +54,45 @@ const GameProvider = ({ children }: Types.Props) => {
     // eslint-disable-next-line
   }, []);
 
-  const setPlayerHandHandler = (hand: Hands) => {
-    socket.emit("user:setHand", hand);
-  };
+  useSocketListeners({
+    socket,
+    setRoomState,
+    setIsOpponentReady,
+    setOpponentWantsRematch,
+    setPlayerHand,
+    setOpponentHand,
+    playRematch,
+  });
 
-  const showdown = () => {
-    socket.emit("room:showdown");
-  };
+  useEffect(() => {
+    if (opponentHand !== Hands.None && playerHand !== Hands.None) {
+      setGameResult(
+        gameRoomUtils.getGameResult({
+          playerHand,
+          opponentHand,
+        })
+      );
+    }
+  }, [opponentHand, playerHand]);
+
+  useEffect(() => {
+    if (playerHand !== Hands.None && isOpponentReady) {
+      showdown();
+    }
+    // eslint-disable-next-line
+  }, [playerHand, isOpponentReady]);
+
+  useEffect(() => {
+    if (gameResult === GameResult.Win) {
+      setPlayerScore((prev) => prev + 1);
+      return;
+    }
+
+    if (gameResult === GameResult.Lose) {
+      setOpponentScore((prev) => prev + 1);
+      return;
+    }
+  }, [gameResult]);
 
   return (
     <GameContext.Provider
@@ -58,7 +102,12 @@ const GameProvider = ({ children }: Types.Props) => {
         playerHand,
         isOpponentReady,
         opponentHand,
-        showdown,
+        rematch,
+        opponentWantsRematch,
+        gameResult,
+        playerScore,
+        opponentScore,
+        rematchSuggested,
       }}
     >
       {children}

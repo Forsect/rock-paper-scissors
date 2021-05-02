@@ -1,24 +1,36 @@
-import colors from "shared/colors";
-import { Hands } from "shared/enums";
+import { Hands, GameResult } from "shared/enums";
+import { Props } from "./gameRoomUtils.types";
 
-export const getGameResult = (
-  playerHand: Hands,
-  opponentHand: Hands,
-  setPlayerColor: React.Dispatch<React.SetStateAction<string>>,
-  setOponnentColor: React.Dispatch<React.SetStateAction<string>>
-) => {
-  if ((playerHand + 1) % 3 === opponentHand) {
-    setOponnentColor(colors.resultWinner);
-    setPlayerColor(colors.resultLoser);
-    return;
+export const getGameResult = ({ playerHand, opponentHand }: Props) => {
+  switch (playerHand) {
+    case Hands.Rock:
+      switch (opponentHand) {
+        case Hands.Rock:
+          return GameResult.Draw;
+        case Hands.Paper:
+          return GameResult.Lose;
+        case Hands.Scissors:
+          return GameResult.Win;
+      }
+    // eslint-disable-next-line
+    case Hands.Paper:
+      switch (opponentHand) {
+        case Hands.Rock:
+          return GameResult.Win;
+        case Hands.Paper:
+          return GameResult.Draw;
+        case Hands.Scissors:
+          return GameResult.Lose;
+      }
+    // eslint-disable-next-line
+    case Hands.Scissors:
+      switch (opponentHand) {
+        case Hands.Rock:
+          return GameResult.Lose;
+        case Hands.Paper:
+          return GameResult.Win;
+        case Hands.Scissors:
+          return GameResult.Draw;
+      }
   }
-
-  if (playerHand === opponentHand) {
-    setOponnentColor(colors.resultDraw);
-    setPlayerColor(colors.resultDraw);
-    return;
-  }
-
-  setOponnentColor(colors.resultLoser);
-  setPlayerColor(colors.resultWinner);
 };

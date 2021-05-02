@@ -30,6 +30,7 @@ io.on("connection", (socket) => {
           host: socket.id,
           hostHand: Hands.None,
           opponentHand: Hands.None,
+          rematch: "",
         },
       ];
       socket.join(roomId);
@@ -65,6 +66,11 @@ io.on("connection", (socket) => {
 
     const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
 
+    if (!foundRoom) {
+      socket.emit("server:error");
+      return;
+    }
+
     if (foundRoom.host === socket.id) {
       if (foundRoom.hostHand === Hands.None) {
         gameRooms = gameRooms.map((gameRoom) =>
@@ -91,11 +97,54 @@ io.on("connection", (socket) => {
   socket.on("room:showdown", () => {
     const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
 
+    if (!foundRoom) {
+      socket.emit("server:error");
+      return;
+    }
+
     if (foundRoom.host === socket.id) {
       socket.emit("user:opponentHand", foundRoom.opponentHand);
       chalker.logOrangeMessage(`room ${foundRoom.roomId} did showdown`);
     } else {
       socket.emit("user:opponentHand", foundRoom.hostHand);
+    }
+  });
+
+  socket.on("room:rematch", () => {
+    const foundRoom = roomUtils.findRoomForSocket(gameRooms, socket.id);
+
+    if (!foundRoom) {
+      socket.emit("server:error");
+      return;
+    }
+
+    if (foundRoom.rematch && foundRoom.rematch !== socket.id) {
+      gameRooms = gameRooms.map((gameRoom) =>
+        gameRoom.roomId === foundRoom.roomId
+          ? ({
+              ...foundRoom,
+              rematch: "",
+              hostHand: Hands.None,
+              opponentHand: Hands.None,
+            } as GameRoom)
+          : gameRoom
+      );
+
+      io.to(foundRoom.roomId).emit("room:playRematch");
+
+      chalker.logBlueMessage(`room ${foundRoom.roomId} has rematch`);
+    } else {
+      gameRooms = gameRooms.map((gameRoom) =>
+        gameRoom.roomId === foundRoom.roomId
+          ? ({ ...foundRoom, rematch: socket.id } as GameRoom)
+          : gameRoom
+      );
+
+      if (foundRoom.host === socket.id) {
+        io.to(foundRoom.opponent!).emit("room:suggestRematch");
+      } else {
+        io.to(foundRoom.host).emit("room:suggestRematch");
+      }
     }
   });
 });
