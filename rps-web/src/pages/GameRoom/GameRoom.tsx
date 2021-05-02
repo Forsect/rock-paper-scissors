@@ -1,7 +1,7 @@
 import { Flex, Text, useColorModeValue, Button } from "@chakra-ui/react";
 import { GameRoomStates } from "shared/enums";
 import colors from "shared/colors";
-import path from "path";
+import urlJoin from "url-join";
 import useGameContext from "../../hooks/useGameContext";
 import { useHistory, useParams } from "react-router-dom";
 import LoadingScreen from "visuals/LoadingScreen";
@@ -12,7 +12,7 @@ import GameRoomPlaying from "pageComponents/GameRoomPlaying";
 const GameRoom = () => {
   const { id } = useParams<{ id: string }>();
   const handsColor = useColorModeValue(colors.main, colors.mainDark);
-  const sendLink = path.join(process.env.REACT_APP_FRONTEND_URL, "game", id);
+  const sendLink = urlJoin(process.env.REACT_APP_FRONTEND_URL, "game", id);
   const history = useHistory();
   const { roomState } = useGameContext();
 
