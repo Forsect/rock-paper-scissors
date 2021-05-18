@@ -6,7 +6,7 @@ const useGameContext = () => {
   const context = useContext(GameContext) as IGameContext;
 
   if (context === undefined) {
-    throw new Error("useGameContext must be used within a UserProvider");
+    throw new Error("useGameContext must be used within a GameProvider");
   }
 
   return context;
